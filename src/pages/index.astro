@@ -1,11 +1,63 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import { StarCanvas } from '../components/StarCanvas'
+import Layout from '../layouts/Layout.astro'
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// El Mapa Estelar de Nuestra Ohana - Regalo de San Valentín
 ---
 
 <Layout>
-	<Welcome />
+  <main class="w-full">
+    <!-- Hero Section -->
+    <section
+      class="h-screen w-full flex flex-col items-center justify-center p-6 text-center relative overflow-hidden"
+    >
+      <div class="z-10 flex flex-col items-center gap-6 max-w-4xl">
+        <h1
+          class="text-6xl md:text-9xl font-romantic text-pink-200 drop-shadow-[0_0_25px_rgba(255,77,148,0.8)] leading-none animate-pulse"
+        >
+          Yei & Ricardo
+        </h1>
+        <p
+          class="text-2xl md:text-4xl font-handwritten text-purple-100 italic tracking-widest mt-4"
+        >
+          Nuestra Ohana, Escrita en las Estrellas
+        </p>
+        <div class="mt-12 opacity-80 animate-bounce flex flex-col items-center">
+          <p class="font-handwritten text-xl mb-4">
+            Desliza para explorar nuestro universo...
+          </p>
+          <div
+            class="w-6 h-10 border-2 border-pink-400 rounded-full flex justify-center p-1"
+          >
+            <div class="w-1 h-2 bg-pink-400 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subtle background stars for hero -->
+      <div class="absolute inset-0 opacity-30 pointer-events-none">
+        <div
+          class="absolute top-[10%] left-[20%] w-1 h-1 bg-white rounded-full animate-ping"
+        >
+        </div>
+        <div
+          class="absolute top-[40%] left-[80%] w-1.5 h-1.5 bg-pink-200 rounded-full animate-pulse"
+        >
+        </div>
+        <div
+          class="absolute top-[70%] left-[10%] w-1 h-1 bg-purple-200 rounded-full animate-ping [animation-delay:1s]"
+        >
+        </div>
+        <div
+          class="absolute top-[80%] left-[60%] w-1 h-1 bg-white rounded-full animate-pulse [animation-delay:2s]"
+        >
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Map Section -->
+    <section id="mapa" class="h-screen w-full sticky top-0">
+      <StarCanvas client:load />
+    </section>
+  </main>
 </Layout>
