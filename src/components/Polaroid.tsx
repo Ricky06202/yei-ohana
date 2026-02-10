@@ -20,11 +20,11 @@ export const Polaroid: React.FC<PolaroidProps> = ({ node, onClose }) => {
       initial={{ opacity: 0, scale: 0.8, rotate: -5, y: 20 }}
       animate={{ opacity: 1, scale: 1, rotate: 2, y: 0 }}
       exit={{ opacity: 0, scale: 0.8, rotate: -5, y: 20 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-md"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#0d071b] touch-none"
       onClick={onClose}
     >
       <motion.div
-        className="relative bg-white p-3 pb-10 md:p-4 md:pb-12 shadow-2xl max-w-[90%] md:max-w-sm w-full"
+        className="relative bg-white p-3 pb-10 md:p-4 md:pb-12 shadow-2xl max-w-[90%] md:max-w-sm w-full overscroll-contain touch-pan-y"
         onClick={(e) => e.stopPropagation()}
         style={{ transform: 'rotate(2deg)' }}
       >

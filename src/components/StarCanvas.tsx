@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Polaroid } from './Polaroid.tsx'
+import { LoveLetter } from './LoveLetter.tsx'
+import { Heart, Mail } from 'lucide-react'
 
 interface Star {
   x: number
@@ -26,7 +28,7 @@ const NODES: ConstellationNode[] = [
   {
     id: 'h1',
     x: 50,
-    y: 35,
+    y: 30,
     label: 'Nuestra Primera Salida',
     memory:
       'Carrera UTP: El comienzo de todo. Nuestra primera salida juntos, ¡qué nervios!',
@@ -35,8 +37,8 @@ const NODES: ConstellationNode[] = [
   },
   {
     id: 'h2',
-    x: 42,
-    y: 25,
+    x: 35,
+    y: 20,
     label: 'Primer Viaje Juntos',
     memory:
       'Nuestro primer viaje a Panamá. Una aventura inolvidable que nos unió más.',
@@ -45,8 +47,8 @@ const NODES: ConstellationNode[] = [
   },
   {
     id: 'h3',
-    x: 58,
-    y: 25,
+    x: 65,
+    y: 20,
     label: 'Cena Especial',
     memory:
       "Disfrutando de esos momentos simples pero perfectos en Mcdonald's.",
@@ -56,7 +58,7 @@ const NODES: ConstellationNode[] = [
   {
     id: 'h4',
     x: 50,
-    y: 45,
+    y: 40,
     label: 'Detalles que Enamoran',
     memory: 'Esas pequeñas cosas, como tus uñas perfectas, que siempre noto.',
     image: '/Unas.png',
@@ -66,8 +68,8 @@ const NODES: ConstellationNode[] = [
   // 'Y' Shape nodes - Yeisury & Aventuras
   {
     id: 'y1',
-    x: 25,
-    y: 65,
+    x: 20,
+    y: 55,
     label: 'Aventura en Boquete',
     memory:
       'Explorando Boquete. La naturaleza y tu sonrisa, la mejor combinación.',
@@ -76,8 +78,8 @@ const NODES: ConstellationNode[] = [
   },
   {
     id: 'y2',
-    x: 35,
-    y: 75,
+    x: 30,
+    y: 70,
     label: 'Momentos en la Finca',
     memory: 'Paz y tranquilidad en Finca Boquete a tu lado.',
     image: '/FincaBoquete.png',
@@ -86,7 +88,7 @@ const NODES: ConstellationNode[] = [
   },
   {
     id: 'y3',
-    x: 30,
+    x: 15,
     y: 85,
     label: 'Amigos con Alas',
     memory:
@@ -98,8 +100,8 @@ const NODES: ConstellationNode[] = [
   // Palm nodes - Ohana & Amigos
   {
     id: 'p1',
-    x: 75,
-    y: 65,
+    x: 80,
+    y: 55,
     label: 'Nuestra Ohana',
     memory:
       'Compartiendo risas y momentos con nuestros amigos. La familia que elegimos.',
@@ -110,7 +112,7 @@ const NODES: ConstellationNode[] = [
   {
     id: 'p2',
     x: 70,
-    y: 75,
+    y: 70,
     label: 'Más de Nuestra Gente',
     memory: 'Siempre rodeados de buena energía y amigos de verdad.',
     image: '/Amigos2.png',
@@ -119,7 +121,7 @@ const NODES: ConstellationNode[] = [
   },
   {
     id: 'p3',
-    x: 80,
+    x: 85,
     y: 85,
     label: 'Parrillada en Familia',
     memory: 'Comida, amigos y mucha felicidad en nuestra parrillada.',
@@ -135,12 +137,27 @@ export const StarCanvas: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<ConstellationNode | null>(
     null,
   )
+  const [showLetter, setShowLetter] = useState(false)
   const [isTouch, setIsTouch] = useState(false)
+  const isTouchRef = useRef(false)
   const stars = useRef<Star[]>([])
 
   useEffect(() => {
+    if (selectedNode || showLetter) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [selectedNode, showLetter])
+
+  useEffect(() => {
     // Detect touch device
-    setIsTouch(window.matchMedia('(pointer: coarse)').matches)
+    const touchMediaQuery = window.matchMedia('(pointer: coarse)')
+    setIsTouch(touchMediaQuery.matches)
+    isTouchRef.current = touchMediaQuery.matches
 
     const canvas = canvasRef.current
     if (!canvas) return
@@ -148,13 +165,13 @@ export const StarCanvas: React.FC = () => {
     if (!ctx) return
 
     const initStars = () => {
-      const count = window.innerWidth < 768 ? 100 : 200
+      const count = window.innerWidth < 768 ? 200 : 350
       stars.current = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: 0.5 + Math.random() * 1.5,
-        opacity: 0.2 + Math.random() * 0.8,
-        speed: 0.05 + Math.random() * 0.1,
+        size: 0.3 + Math.random() * 2.0,
+        opacity: 0.1 + Math.random() * 0.9,
+        speed: 0.03 + Math.random() * 0.12,
       }))
     }
 
@@ -173,6 +190,7 @@ export const StarCanvas: React.FC = () => {
 
       const mouseX = mouseRef.current.x
       const mouseY = mouseRef.current.y
+      const time = Date.now() * 0.001
 
       // Draw background stars
       stars.current.forEach((star) => {
@@ -196,11 +214,29 @@ export const StarCanvas: React.FC = () => {
       // Draw connections
       const radius = window.innerWidth < 768 ? 150 : 250
 
-      if (mouseX !== 0 && mouseY !== 0) {
-        NODES.forEach((node) => {
-          const nx = (node.x / 100) * canvas.width
-          const ny = (node.y / 100) * canvas.height
+      NODES.forEach((node, i) => {
+        const nx = (node.x / 100) * canvas.width
+        const ny = (node.y / 100) * canvas.height
 
+        // On mobile/touch, draw permanent faint connections
+        if (isTouchRef.current) {
+          NODES.forEach((other, j) => {
+            if (i < j && other.shape === node.shape) {
+              const ox = (other.x / 100) * canvas.width
+              const oy = (other.y / 100) * canvas.height
+              
+              const pulse = 0.1 + Math.sin(time * 2 + i + j) * 0.05
+              ctx.strokeStyle = `rgba(212, 165, 255, ${pulse})`
+              ctx.lineWidth = 1
+              ctx.beginPath()
+              ctx.moveTo(nx, ny)
+              ctx.lineTo(ox, oy)
+              ctx.stroke()
+            }
+          })
+        }
+
+        if (mouseX !== 0 && mouseY !== 0) {
           const dx = mouseX - nx
           const dy = mouseY - ny
           const dist = Math.sqrt(dx * dx + dy * dy)
@@ -230,8 +266,8 @@ export const StarCanvas: React.FC = () => {
               }
             })
           }
-        })
-      }
+        }
+      })
 
       animationId = window.requestAnimationFrame(animate)
     }
@@ -276,7 +312,7 @@ export const StarCanvas: React.FC = () => {
           >
             <div className="absolute inset-0 w-16 h-16 m-auto bg-pink-500/20 rounded-full animate-pulse group-hover:bg-pink-500/40" />
             <div className="relative w-6 h-6 bg-pink-400 rounded-full shadow-[0_0_25px_rgba(255,77,148,1)] group-hover:scale-150 transition-transform duration-300 border-2 border-white mx-auto mt-5" />
-            <span className="absolute top-16 left-1/2 -translate-x-1/2 opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 text-lg md:text-2xl font-handwritten whitespace-nowrap text-white drop-shadow-[0_4px_8px_rgba(0,0,0,1)] pointer-events-none bg-black/40 px-3 py-1 rounded-lg backdrop-blur-sm">
+            <span className="absolute top-12 md:top-16 left-1/2 -translate-x-1/2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 text-sm md:text-2xl font-handwritten whitespace-nowrap text-white drop-shadow-[0_4px_8px_rgba(0,0,0,1)] pointer-events-none bg-black/40 px-2 py-0.5 md:px-3 md:py-1 rounded-lg backdrop-blur-sm z-0">
               {node.label}
             </span>
           </div>
@@ -284,7 +320,7 @@ export const StarCanvas: React.FC = () => {
       </div>
 
       {/* Title and HUD */}
-      <div className="absolute top-8 left-6 md:top-12 md:left-12 pointer-events-none z-30 max-w-[80%]">
+      <div className="absolute top-8 left-6 md:top-12 md:left-12 pointer-events-none z-10 max-w-[80%]">
         <h2 className="text-4xl md:text-7xl font-romantic text-pink-200 drop-shadow-[0_0_20px_rgba(255,77,148,0.7)] leading-tight">
           El Mapa de Nuestra Ohana
         </h2>
@@ -307,9 +343,23 @@ export const StarCanvas: React.FC = () => {
         </div>
       )}
 
+      {/* Love Letter Button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => setShowLetter(true)}
+        className="fixed bottom-8 right-8 z-50 bg-pink-500 text-white p-4 rounded-full shadow-[0_0_20px_rgba(255,77,148,0.5)] flex items-center gap-3 hover:bg-pink-600 transition-colors"
+      >
+        <Mail size={24} />
+        <span className="font-handwritten text-xl pr-2">Para ti</span>
+      </motion.button>
+
       <AnimatePresence>
         {selectedNode && (
           <Polaroid node={selectedNode} onClose={() => setSelectedNode(null)} />
+        )}
+        {showLetter && (
+          <LoveLetter onClose={() => setShowLetter(false)} />
         )}
       </AnimatePresence>
 
