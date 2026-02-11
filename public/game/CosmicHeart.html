@@ -124,24 +124,19 @@ const GODOT_CONFIG = {
 	"gdextensionLibs":[],
 	"godotPoolSize":4,
 	"mainPack": `${R2_URL}/CosmicHeart.pck`,
-	"wasmBinaryFile": `${R2_URL}/CosmicHeart.wasm`,
-	"locateFile": function(path, prefix) {
-		console.log("Godot solicita archivo:", path, "con prefix:", prefix);
-		if (path.endsWith(".wasm") || path.endsWith(".pck") || path === "CosmicHeart.wasm" || path === "CosmicHeart.pck") {
-			const url = `${R2_URL}/${path}`;
-			console.log("Redirigiendo a R2:", url);
-			return url;
-		}
-		return prefix + path;
-	}
+	"wasmBinaryFile": `${R2_URL}/CosmicHeart.wasm`
 };
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
-	// Forzamos la URL del WASM antes de empezar
-	GODOT_CONFIG.wasmBinaryFile = `${R2_URL}/CosmicHeart.wasm`;
-	console.log("Forzando WASM a:", GODOT_CONFIG.wasmBinaryFile);
+	// Plan Maestro: Sobrescribimos el cargador interno de Godot
+	const oldInit = engine.init;
+	engine.init = function(basePath) {
+		console.log("Iniciando motor con bypass de R2");
+		return oldInit.apply(this, [R2_URL + "/"]);
+	};
+
 	const statusOverlay = document.getElementById('status');
 	const statusProgress = document.getElementById('status-progress');
 	const statusNotice = document.getElementById('status-notice');
