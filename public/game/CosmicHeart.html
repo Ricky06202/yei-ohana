@@ -111,7 +111,25 @@ body {
 
 		<script src="CosmicHeart.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"CosmicHeart","experimentalVK":false,"fileSizes":{"CosmicHeart.pck":12595448,"CosmicHeart.wasm":37686550},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const R2_URL = "https://pub-1da03a9543ce48b6a762c8cad19d5bfa.r2.dev";
+const GODOT_CONFIG = {
+	"args":[],
+	"canvasResizePolicy":2,
+	"emscriptenPoolSize":8,
+	"ensureCrossOriginIsolationHeaders":true,
+	"executable":"CosmicHeart",
+	"experimentalVK":false,
+	"fileSizes":{"CosmicHeart.pck":12595448,"CosmicHeart.wasm":37686550},
+	"focusCanvas":true,
+	"gdextensionLibs":[],
+	"godotPoolSize":4,
+	"locateFile": function(path, prefix) {
+		if (path.endsWith(".wasm") || path.endsWith(".pck")) {
+			return `${R2_URL}/${path}`;
+		}
+		return prefix + path;
+	}
+};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
