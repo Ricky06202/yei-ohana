@@ -292,21 +292,21 @@ export const StarCanvas: React.FC = () => {
 
   return (
     <div
-      className="relative w-full h-full cursor-none overflow-hidden bg-[#0d071b] touch-none"
+      className="relative w-full h-full cursor-none overflow-hidden bg-[#0d071b] touch-pan-y"
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 z-0 pointer-events-none"
+        className="absolute inset-0 z-0 pointer-events-none touch-pan-y"
       />
 
       {/* Node triggers */}
-      <div className="absolute inset-0 z-10">
+      <div className="absolute inset-0 z-10 touch-pan-y">
         {NODES.map((node) => (
           <div
             key={node.id}
-            className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer p-8"
+            className="absolute -translate-x-1/2 -translate-y-1/2 group cursor-pointer p-8 touch-pan-y"
             style={{ left: `${node.x}%`, top: `${node.y}%` }}
             onClick={() => setSelectedNode(node)}
           >
