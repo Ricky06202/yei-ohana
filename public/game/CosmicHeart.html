@@ -124,8 +124,11 @@ const GODOT_CONFIG = {
 	"gdextensionLibs":[],
 	"godotPoolSize":4,
 	"locateFile": function(path, prefix) {
+		console.log("Godot solicita archivo:", path, "con prefix:", prefix);
 		if (path.endsWith(".wasm") || path.endsWith(".pck")) {
-			return `${R2_URL}/${path}`;
+			const url = `${R2_URL}/${path}`;
+			console.log("Redirigiendo a R2:", url);
+			return url;
 		}
 		return prefix + path;
 	}
