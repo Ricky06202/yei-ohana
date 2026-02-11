@@ -139,6 +139,9 @@ const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
+	// Forzamos la URL del WASM antes de empezar
+	GODOT_CONFIG.wasmBinaryFile = `${R2_URL}/CosmicHeart.wasm`;
+	console.log("Forzando WASM a:", GODOT_CONFIG.wasmBinaryFile);
 	const statusOverlay = document.getElementById('status');
 	const statusProgress = document.getElementById('status-progress');
 	const statusNotice = document.getElementById('status-notice');
