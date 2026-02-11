@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css'
 ---
 
@@ -7,8 +8,7 @@ import '../styles/global.css'
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href="/game/CosmicHeart.icon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>El Mapa Estelar de Nuestra Ohana 🌌</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,6 +17,7 @@ import '../styles/global.css'
       href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Inter:wght@400;700&family=Sacramento&display=swap"
       rel="stylesheet"
     />
+    <ClientRouter />
   </head>
   <body class="bg-[#0f0416] text-white selection:bg-pink-500/30 min-h-screen">
     <slot />

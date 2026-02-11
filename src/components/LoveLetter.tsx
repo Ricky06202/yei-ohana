@@ -76,6 +76,22 @@ export const LoveLetter: React.FC<LoveLetterProps> = ({ onClose }) => {
               Con todo mi cariño, siempre. ✨
             </p>
           </div>
+
+          {/* Botón Abrir Regalo */}
+          <motion.div 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-10"
+          >
+            <a
+              href="/regalo"
+              className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-4 rounded-full font-handwritten text-2xl shadow-lg hover:shadow-pink-500/40 hover:scale-105 transition-all group"
+            >
+              <Heart className="group-hover:fill-white transition-all" />
+              ¡Abrir mi regalo!
+            </a>
+          </motion.div>
         </div>
 
         {/* Decorative elements */}
