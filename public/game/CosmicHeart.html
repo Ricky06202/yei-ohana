@@ -130,11 +130,12 @@ const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
-	// Plan Maestro: Sobrescribimos el cargador interno de Godot
+	// Plan Maestro v2: Forzamos el nombre del ejecutable y la ruta base
 	const oldInit = engine.init;
 	engine.init = function(basePath) {
-		console.log("Iniciando motor con bypass de R2");
-		return oldInit.apply(this, [R2_URL + "/"]);
+		console.log("Iniciando motor con bypass de R2 y nombre forzado");
+		// Si basePath viene vacío o relativo, le inyectamos R2 y el nombre del ejecutable
+		return oldInit.apply(this, [R2_URL + "/CosmicHeart"]);
 	};
 
 	const statusOverlay = document.getElementById('status');
